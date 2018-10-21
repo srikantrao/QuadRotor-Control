@@ -57,11 +57,13 @@ public:
 		return res;
 	}
 
+	// Sum of the diagonal elements
 	float Trace() {
 		float res = _v[0] + _v[4] + _v[8];
 		return res;
 	}
 
+	// Matrix Multiplication
 	Mat3x3F operator*(const Mat3x3F& b)
 	{
 		float res[9] = {0,0,0,0,0,0,0,0,0};
@@ -75,6 +77,7 @@ public:
 		return Mat3x3F(res);
 	}
 
+	// Scalar Multiplication
 	Mat3x3F operator*(const float& b)
 	{
 		float res[9] = {0,0,0,0,0,0,0,0,0};

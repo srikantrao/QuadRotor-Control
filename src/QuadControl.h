@@ -4,6 +4,7 @@
 #include "Utility/StringUtils.h"
 #include "Trajectory.h"
 #include "BaseController.h"
+#include<iostream>
 
 class QuadControl : public BaseController
 {
