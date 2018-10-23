@@ -70,7 +70,7 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
 
 	////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 	
-	// Solution needs to be in NED Frame 
+	// Use signs based on NED frame. 
 	float c_bar = collThrustCmd; 
 	float p_bar = momentCmd.x * sqrt(2) / L;
 	float q_bar = momentCmd.y * sqrt(2) / L;
@@ -228,26 +228,24 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
 
 	////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+	// Both the Velocity and the acceleration are limited by maxSpeedXY and maxHorizAccel in QuadControlParams.txt
 
-
-	/////////////////////////////// END STUDENT CODE ////////////////////////////
-
-	/////////////////////////////// BEGIN SOLUTION //////////////////////////////
-
-	velCmd += kpPosXY * (posCmd - pos);
+	//Velocity Term
+	velCmd = velCmd + kpPosXY * (posCmd - pos);
 
 	if (velCmd.mag() > maxSpeedXY)
 	{
-		velCmd = velCmd * maxSpeedXY / velCmd.mag();
+		velCmd = velCmd.norm() * maxSpeedXY;
 	}
 
+	// Acceleration term with Feed Forward Component 
 	accelCmd += kpVelXY * (velCmd - vel);
 	if (accelCmd.mag() > maxAccelXY)
 	{
-		accelCmd = accelCmd * maxAccelXY / accelCmd.mag();
+		accelCmd = accelCmd.norm() * maxAccelXY ;
 	}
 
-	//////////////////////////////// END SOLUTION ///////////////////////////////
+	/////////////////////////////// END STUDENT CODE ////////////////////////////
 
 	return accelCmd;
 }
@@ -267,25 +265,23 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 
 	float yawRateCmd = 0;
 	////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+	float yaw_err = yawCmd - yaw;
+
+	// Use hint to get the error within the right radian angle range 
+	yaw_err = fmodf(yaw_err, M_PI*2.f);
+
+	if (yaw_err > M_PI)
+	{
+		yaw_err -= 2.f * M_PI;
+	}
+	else if (yaw_err < -M_PI)
+	{
+		yaw_err += 2.f * M_PI;
+	}
+	yawRateCmd = yaw_err * kpYaw;
 
 
 	/////////////////////////////// END STUDENT CODE ////////////////////////////
-
-	/////////////////////////////// BEGIN SOLUTION //////////////////////////////
-
-	float yawError = yawCmd - yaw;
-	yawError = fmodf(yawError, F_PI*2.f);
-	if (yawError > F_PI)
-	{
-		yawError -= 2.f * F_PI;
-	}
-	else if (yawError < -F_PI)
-	{
-		yawError += 2.f * F_PI;
-	}
-	yawRateCmd = yawError * kpYaw;
-
-	//////////////////////////////// END SOLUTION ///////////////////////////////
 
 	return yawRateCmd;
 }
