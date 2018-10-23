@@ -174,6 +174,8 @@ PASS: ABS(Quad2.PosFollowErr) was less than 0.100000 for at least 1.500000 secon
 PASS: ABS(Quad3.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
 ```
 
-## Authors ##
+## Acknowledgements ##
 
 Thanks to Fotokite for the initial development of the project code and simulator.
+
+A lot of the changes incorporated here are based on the discussions and prior questions in the forums. 
